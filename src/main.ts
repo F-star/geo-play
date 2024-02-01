@@ -1,27 +1,20 @@
-import { drawLine, fillPoints, fillPolygon } from "./draw-util";
+import { drawLine, fillPoints, fillPolygon, strokePolygon } from "./draw-util";
 import { getEquilateralTriangle, getAdjSquare } from "./geo";
 
-import { Point } from "./type";
 
 const canvas = document.querySelector("canvas")!;
 const ctx = canvas.getContext("2d")!;
 
 
 
-const strokePolygon = (points: Point[]) => {
-  ctx.beginPath();
-  ctx.moveTo(points[0].x, points[0].y);
-  points.slice(1).forEach((p) => ctx.lineTo(p.x, p.y));
-  ctx.closePath();
-  ctx.stroke();
-}
 
 
 const endPos = { x: 400, y: 400 };
 
 const draw = () => {
-  const startPos = { x: 250, y: 250 };
-  const triangle = getEquilateralTriangle(startPos, endPos, 60);
+  const startPos = { x: canvas.width / 2, y: canvas.height / 2 };
+  const size = 50
+  const triangle = getEquilateralTriangle(startPos, endPos, size);
   fillPolygon(ctx, triangle);
 
   drawLine(ctx, startPos, endPos);
@@ -32,8 +25,8 @@ const draw = () => {
   ctx.restore();
 
 
-  const square = getAdjSquare(startPos, endPos, 60);
-  strokePolygon(square)
+  const { points: squarePoints} = getAdjSquare(startPos, endPos, size);
+  strokePolygon(ctx, squarePoints)
 };
 
 draw();

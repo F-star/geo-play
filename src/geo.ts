@@ -41,12 +41,13 @@ export const getAdjSquare = (p1: Point, p2: Point, size: number) => {
 
   let dx = 0;
   let dy = 0;
+  // 注意矢量为零的情况，此时我希望矩形靠上方
   if (Math.abs(vector.x) > Math.abs(vector.y)) {
     dx = Math.sign(vector.x) * halfSize;
-    dy = (dx * vector.y) / vector.x;
+    dy = vector.x === 0 ? 0 : (dx * vector.y) / vector.x;
   } else {
-    dy = Math.sign(vector.y) * halfSize;
-    dx = (dy * vector.x) / vector.y;
+    dy = (Math.sign(vector.y) || -1) * halfSize;
+    dx = vector.y === 0 ? 0 : (dy * vector.x) / vector.y;
   }
 
   const center = {
@@ -54,22 +55,25 @@ export const getAdjSquare = (p1: Point, p2: Point, size: number) => {
     y: p2.y + dy,
   };
 
-  return [
-    {
-      x: center.x - halfSize,
-      y: center.y - halfSize,
-    },
-    {
-      x: center.x + halfSize,
-      y: center.y - halfSize,
-    },
-    {
-      x: center.x + halfSize,
-      y: center.y + halfSize,
-    },
-    {
-      x: center.x - halfSize,
-      y: center.y + halfSize,
-    },
-  ];
+  return {
+    center,
+    points: [
+      {
+        x: center.x - halfSize,
+        y: center.y - halfSize,
+      },
+      {
+        x: center.x + halfSize,
+        y: center.y - halfSize,
+      },
+      {
+        x: center.x + halfSize,
+        y: center.y + halfSize,
+      },
+      {
+        x: center.x - halfSize,
+        y: center.y + halfSize,
+      },
+    ],
+  };
 };

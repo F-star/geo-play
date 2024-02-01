@@ -8,6 +8,14 @@ export const fillPolygon = (ctx: CanvasRenderingContext2D, points: Point[]) => {
   ctx.fill();
 };
 
+export const strokePolygon = (ctx: CanvasRenderingContext2D, points: Point[]) => {
+  ctx.beginPath();
+  ctx.moveTo(points[0].x, points[0].y);
+  points.slice(1).forEach((p) => ctx.lineTo(p.x, p.y));
+  ctx.closePath();
+  ctx.stroke();
+}
+
 export const fillPoints = (ctx: CanvasRenderingContext2D, p: Point[]) => {
   p.forEach((p) => {
     ctx.beginPath();
