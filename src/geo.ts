@@ -1,4 +1,4 @@
-import { Point } from "./type";
+import { Point } from './type';
 
 const distance = (p1: Point, p2: Point) => {
   return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
@@ -8,7 +8,7 @@ const distance = (p1: Point, p2: Point) => {
 export const getEquilateralTriangle = (
   p1: Point,
   p2: Point,
-  width: number
+  width: number,
 ): [Point, Point, Point] => {
   const dist = distance(p1, p2);
   const halfWidth = width / 2;
@@ -76,4 +76,32 @@ export const getAdjSquare = (p1: Point, p2: Point, size: number) => {
       },
     ],
   };
+};
+
+/**
+ * 计算贝塞尔曲线的连续多个点，用于绘制贝塞尔曲线
+ * （直接代入公式）
+ */
+export const getBezierPoints = (
+  p1: Point,
+  cp1: Point,
+  cp2: Point,
+  p2: Point,
+): Point[] => {
+  const points: Point[] = [];
+  for (let t = 0; t <= 1; t += 0.01) {
+    const x =
+      (1 - t) ** 3 * p1.x +
+      3 * (1 - t) ** 2 * t * cp1.x +
+      3 * (1 - t) * t ** 2 * cp2.x +
+      t ** 3 * p2.x;
+    const y =
+      (1 - t) ** 3 * p1.y +
+      3 * (1 - t) ** 2 * t * cp1.y +
+      3 * (1 - t) * t ** 2 * cp2.y +
+      t ** 3 * p2.y;
+    points.push({ x, y });
+  }
+  console.log(points.length);
+  return points;
 };

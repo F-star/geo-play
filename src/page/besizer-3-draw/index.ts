@@ -1,22 +1,53 @@
-import { getEquilateralTriangle } from "../../geo";
+import { drawBezier, drawLine, fillPoints } from '../../draw-util';
+import { getBezierPoints } from '../../geo';
 
-import { Point } from "../../type";
+const canvas = document.querySelector('canvas')!;
+const ctx = canvas.getContext('2d')!;
 
-const canvas = document.querySelector("canvas")!;
-const ctx = canvas.getContext("2d")!;
-
-const p1 = { x: 250, y: 250 };
-const p2 = { x: 400, y: 400 };
-// 控制点
-const cp1 = { x: 300, y: 250 };
-const cp2 = { x: 350, y: 400 };
+const p1 = { x: 180, y: 319 };
+const cp1 = { x: 92, y: 133 };
+const cp2 = { x: 387, y: 213 };
+const p2 = { x: 287, y: 405 };
 
 const draw = () => {
-  //
+  ctx.save();
+  // ctx.setLineDash([5]);
+  ctx.strokeStyle = 'gray';
+  drawLine(ctx, p1, cp1);
+  drawLine(ctx, p2, cp2);
+  ctx.restore();
+
+  // drawBezier(ctx, p1, cp1, cp2, p2);
+  fillPoints(ctx, [p1, cp1, cp2, p2]);
+
+  const bezierPts = getBezierPoints(p1, cp1, cp2, p2);
+  ctx.save();
+  ctx.fillStyle = 'red';
+  fillPoints(ctx, bezierPts, 4);
+  ctx.restore();
 };
 
 draw();
 
-canvas.addEventListener("mousemove", (e) => {
-  //
+canvas.addEventListener('pointerdown', (e) => {
+  const points = [p1, cp1, cp2, p2];
+  const index = points.findIndex((p) => {
+    return Math.abs(p.x - e.clientX) < 6 && Math.abs(p.y - e.clientY) < 6;
+  });
+  if (index === -1) {
+    return;
+  }
+  const move = (e: PointerEvent) => {
+    points[index].x = e.clientX;
+    points[index].y = e.clientY;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    draw();
+  };
+  const up = () => {
+    canvas.removeEventListener('pointermove', move);
+    canvas.removeEventListener('pointerup', up);
+  };
+
+  canvas.addEventListener('pointermove', move);
+  canvas.addEventListener('pointerup', up);
 });
