@@ -87,9 +87,11 @@ export const getBezierPoints = (
   cp1: Point,
   cp2: Point,
   p2: Point,
+  step = 0.01,
 ): Point[] => {
   const points: Point[] = [];
-  for (let t = 0; t <= 1; t += 0.01) {
+  for (let t = 0; t <= 1.00000001; t += step) {
+    console.log(t);
     const x =
       (1 - t) ** 3 * p1.x +
       3 * (1 - t) ** 2 * t * cp1.x +
@@ -102,6 +104,5 @@ export const getBezierPoints = (
       t ** 3 * p2.y;
     points.push({ x, y });
   }
-  console.log(points.length);
   return points;
 };

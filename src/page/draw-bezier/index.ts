@@ -1,4 +1,9 @@
-import { drawBezier, drawLine, fillPoints } from '../../draw-util';
+import {
+  drawBezier,
+  drawLine,
+  fillPoints,
+  strokePolygon,
+} from '../../draw-util';
 import { getBezierPoints } from '../../geo';
 
 const canvas = document.querySelector('canvas')!;
@@ -20,10 +25,10 @@ const draw = () => {
   // drawBezier(ctx, p1, cp1, cp2, p2);
   fillPoints(ctx, [p1, cp1, cp2, p2]);
 
-  const bezierPts = getBezierPoints(p1, cp1, cp2, p2);
+  const bezierPts = getBezierPoints(p1, cp1, cp2, p2, 0.06);
   ctx.save();
-  ctx.fillStyle = 'red';
-  fillPoints(ctx, bezierPts, 4);
+  // ctx.fillStyle = 'red';
+  strokePolygon(ctx, bezierPts, false);
   ctx.restore();
 };
 
@@ -45,9 +50,9 @@ canvas.addEventListener('pointerdown', (e) => {
   };
   const up = () => {
     canvas.removeEventListener('pointermove', move);
-    canvas.removeEventListener('pointerup', up);
+    window.removeEventListener('pointerup', up);
   };
 
   canvas.addEventListener('pointermove', move);
-  canvas.addEventListener('pointerup', up);
+  window.addEventListener('pointerup', up);
 });

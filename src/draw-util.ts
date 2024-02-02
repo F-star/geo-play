@@ -11,11 +11,14 @@ export const fillPolygon = (ctx: CanvasRenderingContext2D, points: Point[]) => {
 export const strokePolygon = (
   ctx: CanvasRenderingContext2D,
   points: Point[],
+  closed = true,
 ) => {
   ctx.beginPath();
   ctx.moveTo(points[0].x, points[0].y);
   points.slice(1).forEach((p) => ctx.lineTo(p.x, p.y));
-  ctx.closePath();
+  if (closed) {
+    ctx.closePath();
+  }
   ctx.stroke();
 };
 
