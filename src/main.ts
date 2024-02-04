@@ -1,4 +1,10 @@
-import { drawLine, fillPoints, fillPolygon, strokePolygon } from './draw-util';
+import {
+  drawLine,
+  drawTextInCenter,
+  fillPoints,
+  fillPolygon,
+  strokePolygon,
+} from './draw-util';
 import { getEquilateralTriangle, getAdjSquare } from './geo';
 
 const canvas = document.querySelector('canvas')!;
@@ -19,8 +25,9 @@ const draw = () => {
   fillPoints(ctx, [startPos, endPos]);
   ctx.restore();
 
-  const { points: squarePoints } = getAdjSquare(startPos, endPos, size);
+  const { center, points: squarePoints } = getAdjSquare(startPos, endPos, size);
   strokePolygon(ctx, squarePoints);
+  drawTextInCenter(ctx, center, 'A', size / 2);
 };
 
 draw();

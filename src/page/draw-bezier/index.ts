@@ -25,7 +25,7 @@ const draw = () => {
   // drawBezier(ctx, p1, cp1, cp2, p2);
   fillPoints(ctx, [p1, cp1, cp2, p2]);
 
-  const bezierPts = getBezierPoints(p1, cp1, cp2, p2, 0.06);
+  const bezierPts = getBezierPoints(p1, cp1, cp2, p2, 0.01);
   ctx.save();
   // ctx.fillStyle = 'red';
   strokePolygon(ctx, bezierPts, false);

@@ -58,3 +58,16 @@ export const drawBezier = (
   ctx.bezierCurveTo(p2.x, p2.y, p3.x, p3.y, p4.x, p4.y);
   ctx.stroke();
 };
+
+export const drawTextInCenter = (
+  ctx: CanvasRenderingContext2D,
+  p: Point,
+  text: string,
+  size: number,
+) => {
+  ctx.font = `${size}px sans-serif`;
+  // 水平垂直居中绘制文字
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = 'center';
+  ctx.fillText(text, p.x, p.y);
+};
