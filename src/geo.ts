@@ -106,3 +106,51 @@ export const getBezierPoints = (
   }
   return points;
 };
+
+export const nearestPointOnLine = (
+  p1: Point,
+  p2: Point,
+  p: Point,
+  /** 可以在线段之外 */
+  canOutside = true,
+) => {
+  const dx = p2.x - p1.x;
+  const dy = p2.y - p1.y;
+  let t = ((p.x - p1.x) * dx + (p.y - p1.y) * dy) / (dx * dx + dy * dy);
+  if (!canOutside) {
+    t = Math.max(0, Math.min(1, t));
+  }
+  return {
+    x: p1.x + t * dx,
+    y: p1.y + t * dy,
+  };
+};
+
+export const nearestPointOnCircle = (
+  center: Point,
+  radius: number,
+  p: Point,
+) => {
+  const dx = p.x - center.x;
+  const dy = p.y - center.y;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+  if (dist <= radius) {
+    return p;
+  }
+  return {
+    x: center.x + (dx * radius) / dist,
+    y: center.y + (dy * radius) / dist,
+  };
+};
+
+// 插值算法
+// 已知 p1 和 p2，求 p1 到 p2 方向，距离 dist 的点 p
+export const interpolate = (p1: Point, p2: Point, dist: number) => {
+  const dx = p2.x - p1.x;
+  const dy = p2.y - p1.y;
+  const d = Math.sqrt(dx * dx + dy * dy);
+  return {
+    x: p1.x + (dx * dist) / d,
+    y: p1.y + (dy * dist) / d,
+  };
+};
