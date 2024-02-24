@@ -1,7 +1,9 @@
 import { Point } from './type';
 
 const distance = (p1: Point, p2: Point) => {
-  return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+  const dx = p2.x - p1.x;
+  const dy = p2.y - p1.y;
+  return Math.sqrt(dx * dx + dy * dy);
 };
 
 // 计算等边三角形
@@ -107,26 +109,38 @@ export const getBezierPoints = (
   return points;
 };
 
-export const nearestPointOnLine = (
+export const closestPointOnLine = (
   p1: Point,
   p2: Point,
   p: Point,
-  /** 可以在线段之外 */
-  canOutside = true,
+  /** 是否限制在在线段之内 */
+  canOutside = false,
 ) => {
+  if (p1.x === p2.x && p1.y === p2.y) {
+    return {
+      t: 0,
+      d: distance(p1, p),
+      point: { x: p1.x, y: p1.y },
+    };
+  }
   const dx = p2.x - p1.x;
   const dy = p2.y - p1.y;
   let t = ((p.x - p1.x) * dx + (p.y - p1.y) * dy) / (dx * dx + dy * dy);
   if (!canOutside) {
     t = Math.max(0, Math.min(1, t));
   }
-  return {
+  const closestPt = {
     x: p1.x + t * dx,
     y: p1.y + t * dy,
   };
+  return {
+    t,
+    d: distance(p, closestPt),
+    point: closestPt,
+  };
 };
 
-export const nearestPointOnCircle = (
+export const closestPointOnCircle = (
   center: Point,
   radius: number,
   p: Point,
@@ -134,23 +148,29 @@ export const nearestPointOnCircle = (
   const dx = p.x - center.x;
   const dy = p.y - center.y;
   const dist = Math.sqrt(dx * dx + dy * dy);
-  if (dist <= radius) {
-    return p;
-  }
+  const t = dist === 0 ? 0 : radius / dist;
+  const closestPt = {
+    x: center.x + dx * t,
+    y: center.y + dy * t,
+  };
   return {
-    x: center.x + (dx * radius) / dist,
-    y: center.y + (dy * radius) / dist,
+    d: Math.abs(dist - radius),
+    point: closestPt,
   };
 };
 
-// 插值算法
-// 已知 p1 和 p2，求 p1 到 p2 方向，距离 dist 的点 p
+/**
+ * 插值算法
+ * 已知 p1 和 p2，求 p1 到 p2 方向，距离 dist 的点 p
+ * dist 可以为负
+ */
 export const interpolate = (p1: Point, p2: Point, dist: number) => {
   const dx = p2.x - p1.x;
   const dy = p2.y - p1.y;
   const d = Math.sqrt(dx * dx + dy * dy);
+  const t = dist / d;
   return {
-    x: p1.x + (dx * dist) / d,
-    y: p1.y + (dy * dist) / d,
+    x: p1.x + dx * t,
+    y: p1.y + dy * t,
   };
 };

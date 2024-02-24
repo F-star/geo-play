@@ -35,6 +35,16 @@ export const fillPoints = (
   });
 };
 
+export const strokeCircle = (
+  ctx: CanvasRenderingContext2D,
+  center: Point,
+  radius: number,
+) => {
+  ctx.beginPath();
+  ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
+  ctx.stroke();
+};
+
 export const drawLine = (
   ctx: CanvasRenderingContext2D,
   p1: Point,
@@ -70,4 +80,26 @@ export const drawTextInCenter = (
   ctx.textBaseline = 'middle';
   ctx.textAlign = 'center';
   ctx.fillText(text, p.x, p.y);
+};
+
+export const drawNumText = (
+  ctx: CanvasRenderingContext2D,
+  p: Point,
+  text: string,
+  color?: string,
+  offsetX = -3,
+  offsetY = -10,
+) => {
+  ctx.save();
+  if (color) {
+    ctx.fillStyle = color;
+  }
+  ctx.font = '18px sans-serif';
+  ctx.fillText(
+    // `${text} (${parseFloat(p.x.toFixed(1))}, ${parseFloat(p.y.toFixed(1))})`,
+    text,
+    p.x + offsetX,
+    p.y + offsetY,
+  );
+  ctx.restore();
 };
