@@ -174,3 +174,55 @@ export const interpolate = (p1: Point, p2: Point, dist: number) => {
     y: p1.y + dy * t,
   };
 };
+
+/** 求两个向量的夹角 */
+export const getAngle = (a: Point, b: Point) => {
+  // FIXME: 注意零向量问题
+
+  // 使用点乘求夹角
+  const dot = a.x * b.x + a.y * b.y;
+  const d = Math.sqrt(a.x * a.x + a.y * a.y) * Math.sqrt(b.x * b.x + b.y * b.y);
+  let cosTheta = dot / d;
+  // 修正精度问题导致的 cosTheta 超出 [-1, 1] 的范围
+  // 导致 Math.acos(cosTheta) 的结果为 NaN
+  if (cosTheta > 1) {
+    cosTheta = 1;
+  } else if (cosTheta < -1) {
+    cosTheta = -1;
+  }
+  return Math.acos(cosTheta);
+};
+
+/**
+ * 求向量 a 到向量 b 扫过的夹角
+ * 这里假设为 x时针方向为正
+ */
+export const getSweepAngle = (a: Point, b: Point) => {
+  // FIXME: 注意零向量问题
+
+  // 使用点乘求夹角
+  const dot = a.x * b.x + a.y * b.y;
+  const d = Math.sqrt(a.x * a.x + a.y * a.y) * Math.sqrt(b.x * b.x + b.y * b.y);
+  let cosTheta = dot / d;
+  // 修正精度问题导致的 cosTheta 超出 [-1, 1] 的范围
+  // 导致 Math.acos(cosTheta) 的结果为 NaN
+  if (cosTheta > 1) {
+    cosTheta = 1;
+  } else if (cosTheta < -1) {
+    cosTheta = -1;
+  }
+
+  let theta = Math.acos(cosTheta);
+  // 通过叉积判断方向
+  // 如果 b 在 a 的左边，则取负值
+  if (a.x * b.y - a.y * b.x < 0) {
+    theta = -theta;
+  }
+
+  return theta;
+};
+
+// 弧度转角度
+export const radToDeg = (rad: number) => {
+  return (rad * 180) / Math.PI;
+};
