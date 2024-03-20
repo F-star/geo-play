@@ -226,3 +226,56 @@ export const getSweepAngle = (a: Point, b: Point) => {
 export const radToDeg = (rad: number) => {
   return (rad * 180) / Math.PI;
 };
+
+const rotate = (p: Point, center: Point, rad: number) => {
+  const dx = p.x - center.x;
+  const dy = p.y - center.y;
+  const cos = Math.cos(rad);
+  const sin = Math.sin(rad);
+  return {
+    x: center.x + dx * cos - dy * sin,
+    y: center.y + dx * sin + dy * cos,
+  };
+};
+
+/**
+ * 计算和圆内切的正多边形
+ * @param center 圆心
+ * @param start 起点
+ * @param count 边数
+ */
+export const getInternalTanRegularPolygon = (
+  center: Point,
+  start: Point,
+  count: number,
+) => {
+  const points: Point[] = [{ ...start }];
+  const step = (Math.PI * 2) / count;
+  for (let i = 1; i < count; i++) {
+    points.push(rotate(start, center, step * i));
+  }
+  return points;
+};
+
+/**
+ * 计算和圆外切的正多边形
+ * @param center 圆心
+ * @param start 起点
+ * @param count 边数
+ */
+export const getExternalTanRegularPolygon = (
+  center: Point,
+  start: Point,
+  count: number,
+) => {
+  // 转换为内切多边形，计算新的 start
+  const offsetAngle = Math.PI / count;
+  start = rotate(start, center, offsetAngle);
+  const t = 1 / Math.cos(offsetAngle);
+  start = {
+    x: center.x + (start.x - center.x) * t,
+    y: center.y + (start.y - center.y) * t,
+  };
+
+  return getInternalTanRegularPolygon(center, start, count);
+};
