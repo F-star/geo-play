@@ -19,5 +19,8 @@
     "tabWidth": 2,
     "semi": true,
     "bracketSpacing": true
+  },
+  "dependencies": {
+    "pixi.js": "^8.0.2"
   }
 }

@@ -1,3 +1,4 @@
+import { Matrix } from 'pixi.js';
 import { Point } from './type';
 
 const distance = (p1: Point, p2: Point) => {
@@ -238,6 +239,15 @@ const rotate = (p: Point, center: Point, rad: number) => {
   };
 };
 
+const rotateWithMatrix = (p: Point, center: Point, rad: number) => {
+  const matrix = new Matrix()
+    .translate(-center.x, -center.y) // (3) 坐标轴回到原来位置
+    .rotate(rad) // (2) 旋转
+    .translate(center.x, center.y); // (1) 坐标轴原点移动到 center
+
+  return matrix.apply(p);
+};
+
 /**
  * 计算和圆内切的正多边形
  * @param center 圆心
@@ -253,6 +263,19 @@ export const getInternalTanRegularPolygon = (
   const step = (Math.PI * 2) / count;
   for (let i = 1; i < count; i++) {
     points.push(rotate(start, center, step * i));
+  }
+  return points;
+};
+
+export const getInternalTanRegularPolygon2 = (
+  center: Point,
+  start: Point,
+  count: number,
+) => {
+  const points: Point[] = [{ ...start }];
+  const step = (Math.PI * 2) / count;
+  for (let i = 1; i < count; i++) {
+    points.push(rotate(points[i - 1], center, step));
   }
   return points;
 };
