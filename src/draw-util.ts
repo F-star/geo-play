@@ -1,4 +1,4 @@
-import { Point } from './type';
+import { Point, Rect } from './type';
 
 export const fillPolygon = (ctx: CanvasRenderingContext2D, points: Point[]) => {
   ctx.beginPath();
@@ -102,4 +102,12 @@ export const drawNumText = (
     p.y + offsetY,
   );
   ctx.restore();
+};
+
+export const drawImg = (
+  ctx: CanvasRenderingContext2D,
+  img: HTMLImageElement,
+  rect: Rect,
+) => {
+  ctx.drawImage(img, rect.x, rect.y, rect.width, rect.height);
 };
