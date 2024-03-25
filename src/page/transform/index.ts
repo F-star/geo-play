@@ -11,7 +11,8 @@ const oldRect = {
   width: 80,
   height: 50,
   // transform: new Matrix(1, 2, 3, 4, 200, 200),
-  transform: new Matrix(0.987391, 0.1583, -0.371753, 0.928332, 200, 200),
+  // transform: new Matrix(0.987391, 0.1583, -0.371753, 0.928332, 200, 200),
+  transform: new Matrix(0.894991, 0.446084, -0.889758, 0.456433, 300, 200),
   // transform: new Matrix(1, 0, 0, 1, 0, 0),
 };
 
