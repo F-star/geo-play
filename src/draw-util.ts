@@ -94,13 +94,17 @@ export const drawNumText = (
   if (color) {
     ctx.fillStyle = color;
   }
+  ctx.strokeStyle = 'white';
+  ctx.lineWidth = 2;
   ctx.font = '18px sans-serif';
+  ctx.strokeText(text, p.x + offsetX, p.y + offsetY);
   ctx.fillText(
     // `${text} (${parseFloat(p.x.toFixed(1))}, ${parseFloat(p.y.toFixed(1))})`,
     text,
     p.x + offsetX,
     p.y + offsetY,
   );
+
   ctx.restore();
 };
 

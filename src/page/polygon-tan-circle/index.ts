@@ -51,6 +51,7 @@ const draw = () => {
     ctx.restore();
   }
 
+  drawNumText(ctx, center, 'center');
   drawNumText(ctx, start, 'start');
   drawNumText(ctx, { x: 20, y: 50 }, `count: ${count}`);
 };
