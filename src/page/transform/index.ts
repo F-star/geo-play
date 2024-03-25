@@ -25,16 +25,13 @@ let movedPt = {
   y: 0,
 };
 
+let type = 'right-bottom';
+
 const draw = () => {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const rect = recomputeRectAttrs(
-    oldRect,
-    movedPt,
-    // 'right-bottom',
-    'left-bottom',
-  );
+  const rect = recomputeRectAttrs(oldRect, movedPt, type);
 
   // 原图
   {
@@ -130,15 +127,8 @@ const recomputeRectAttrs = (
   const newLocalPt = rect.transform.applyInverse(newGlobalPt);
 
   if (type === 'right-bottom') {
-    // type 为 right-bottom
     // 缩放中心在左上角
     const localOrigin = { x: 0, y: 0 };
-    // const globalOrigin = rect.transform.apply(localOrigin);
-    // // 右下角
-    // const localPt = {
-    //   x: rect.width,
-    //   y: rect.height,
-    // };
     newRect.width = Math.abs(newLocalPt.x - localOrigin.x);
     newRect.height = Math.abs(newLocalPt.y - localOrigin.y);
     const scaleX = Math.sign(newLocalPt.x - localOrigin.x) || 1;
@@ -146,35 +136,72 @@ const recomputeRectAttrs = (
     const scaleTransform = new Matrix(scaleX, 0, 0, scaleY, 0, 0);
     newRect.transform = newRect.transform.append(scaleTransform);
   } else if (type === 'left-bottom') {
+    // 缩放中心在右上角
     const localOrigin = { x: oldRect.width, y: 0 };
     const globalOrigin = rect.transform.apply(localOrigin);
-    // fillPoints(ctx, [globalOrigin], 20);
-    // console.log(globalOrigin);
 
     newRect.width = Math.abs(newLocalPt.x - localOrigin.x);
     newRect.height = Math.abs(newLocalPt.y - localOrigin.y);
 
     const scaleX = Math.sign(localOrigin.x - newLocalPt.x) || 1;
     const scaleY = Math.sign(newLocalPt.y - localOrigin.y) || 1;
-    const scaleTransform = new Matrix()
-      // .translate(localOrigin.x, localOrigin.y)
-      .scale(scaleX, scaleY);
-    // const tranlateTransform = new Matrix(scaleX, 0, 0, scaleY, 0, 0)
-    // console.log({ })
+    const scaleTransform = new Matrix().scale(scaleX, scaleY);
+
     newRect.transform = newRect.transform.append(scaleTransform);
     const newGlobalOrigin = newRect.transform.apply({
       x: newRect.width,
       y: 0,
     });
-    // fillPoints(ctx, [newGlobalOrigin], 30);
-
-    console.log(newGlobalOrigin);
 
     const offset = {
       x: newGlobalOrigin.x - globalOrigin.x,
       y: newGlobalOrigin.y - globalOrigin.y,
     };
-    console.log(offset);
+
+    newRect.transform.translate(-offset.x, -offset.y);
+  } else if (type === 'left-top') {
+    // 缩放中心在右下角
+    const localOrigin = { x: oldRect.width, y: oldRect.height };
+    const globalOrigin = rect.transform.apply(localOrigin);
+
+    newRect.width = Math.abs(newLocalPt.x - localOrigin.x);
+    newRect.height = Math.abs(newLocalPt.y - localOrigin.y);
+
+    const scaleX = Math.sign(localOrigin.x - newLocalPt.x) || 1;
+    const scaleY = Math.sign(localOrigin.y - newLocalPt.y) || 1;
+    const scaleTransform = new Matrix().scale(scaleX, scaleY);
+
+    newRect.transform = newRect.transform.append(scaleTransform);
+    const newGlobalOrigin = newRect.transform.apply({
+      x: newRect.width,
+      y: newRect.height,
+    });
+
+    const offset = {
+      x: newGlobalOrigin.x - globalOrigin.x,
+      y: newGlobalOrigin.y - globalOrigin.y,
+    };
+
+    newRect.transform.translate(-offset.x, -offset.y);
+  } else if (type === 'right-top') {
+    // 缩放中心在左下角
+    const localOrigin = { x: 0, y: oldRect.height };
+    const globalOrigin = rect.transform.apply(localOrigin);
+    newRect.width = Math.abs(newLocalPt.x - localOrigin.x);
+    newRect.height = Math.abs(newLocalPt.y - localOrigin.y);
+    const scaleX = Math.sign(newLocalPt.x - localOrigin.x) || 1;
+    const scaleY = Math.sign(localOrigin.y - newLocalPt.y) || 1;
+    const scaleTransform = new Matrix().scale(scaleX, scaleY);
+    newRect.transform = newRect.transform.append(scaleTransform);
+    const newGlobalOrigin = newRect.transform.apply({
+      x: 0,
+      y: newRect.height,
+    });
+
+    const offset = {
+      x: newGlobalOrigin.x - globalOrigin.x,
+      y: newGlobalOrigin.y - globalOrigin.y,
+    };
 
     newRect.transform.translate(-offset.x, -offset.y);
   }
@@ -189,6 +216,9 @@ canvas.addEventListener('pointermove', (e: PointerEvent) => {
 });
 
 canvas.addEventListener('click', () => {
-  // ...
+  const types = ['left-top', 'right-top', 'left-bottom', 'right-bottom'];
+  const currIndex = types.find((t) => t === type);
+
+  type = types[(types.indexOf(currIndex!) + 1) % types.length];
   draw();
 });
