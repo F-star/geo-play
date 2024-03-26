@@ -91,12 +91,19 @@ const draw = () => {
     y: rect.height,
   });
 
-  fillPoints(ctx, [leftTop, rightTop, leftBottom, rightBottom, movedPt]);
+  fillPoints(ctx, [leftTop, rightTop, leftBottom, rightBottom], 8);
+
+  ctx.save();
+  ctx.fillStyle = 'red';
+  fillPoints(ctx, [movedPt], 12);
+  ctx.restore();
+
   drawNumText(ctx, leftTop, 'left-top');
   drawNumText(ctx, rightTop, 'right-top');
   drawNumText(ctx, leftBottom, 'left-bottom');
   drawNumText(ctx, rightBottom, 'right-bottom');
   // drawNumText(ctx, movedPt, `${movedPt.x.toFixed(2)}, ${movedPt.y.toFixed(2)}`);
+  drawNumText(ctx, { x: 20, y: 40 }, `缩放的控制点为：${type}`);
 };
 
 img.onload = () => {
@@ -113,7 +120,7 @@ const recomputeRectAttrs = (
   /** 世界坐标系的控制点的新位置 */
   newGlobalPt: { x: number; y: number },
   /** 被移动的控制点类型，我们会基于这个 type，确定 origin */
-  type: 'left-top' | 'right-top' | 'left-bottom' | 'right-bottom',
+  type: 'left-top' | 'right-top' | 'left-bottom' | 'right-bottom' | 'right',
 ): { width: number; height: number; transform: Matrix } => {
   /**
    * 算法步骤
@@ -133,7 +140,7 @@ const recomputeRectAttrs = (
     newRect.height = Math.abs(newLocalPt.y - localOrigin.y);
     const scaleX = Math.sign(newLocalPt.x - localOrigin.x) || 1;
     const scaleY = Math.sign(newLocalPt.y - localOrigin.y) || 1;
-    const scaleTransform = new Matrix(scaleX, 0, 0, scaleY, 0, 0);
+    const scaleTransform = new Matrix().scale(scaleX, scaleY);
     newRect.transform = newRect.transform.append(scaleTransform);
   } else if (type === 'left-bottom') {
     // 缩放中心在右上角
@@ -154,11 +161,11 @@ const recomputeRectAttrs = (
     });
 
     const offset = {
-      x: newGlobalOrigin.x - globalOrigin.x,
-      y: newGlobalOrigin.y - globalOrigin.y,
+      x: globalOrigin.x - newGlobalOrigin.x,
+      y: globalOrigin.y - newGlobalOrigin.y,
     };
 
-    newRect.transform.translate(-offset.x, -offset.y);
+    newRect.transform.translate(offset.x, offset.y);
   } else if (type === 'left-top') {
     // 缩放中心在右下角
     const localOrigin = { x: oldRect.width, y: oldRect.height };
@@ -178,11 +185,11 @@ const recomputeRectAttrs = (
     });
 
     const offset = {
-      x: newGlobalOrigin.x - globalOrigin.x,
-      y: newGlobalOrigin.y - globalOrigin.y,
+      x: globalOrigin.x - newGlobalOrigin.x,
+      y: globalOrigin.y - newGlobalOrigin.y,
     };
 
-    newRect.transform.translate(-offset.x, -offset.y);
+    newRect.transform.translate(offset.x, offset.y);
   } else if (type === 'right-top') {
     // 缩放中心在左下角
     const localOrigin = { x: 0, y: oldRect.height };
@@ -199,11 +206,29 @@ const recomputeRectAttrs = (
     });
 
     const offset = {
-      x: newGlobalOrigin.x - globalOrigin.x,
-      y: newGlobalOrigin.y - globalOrigin.y,
+      x: globalOrigin.x - newGlobalOrigin.x,
+      y: globalOrigin.y - newGlobalOrigin.y,
     };
+    newRect.transform.translate(offset.x, offset.y);
+  } else if (type === 'right') {
+    const localOrigin = { x: 0, y: oldRect.height / 2 };
+    const globalOrigin = rect.transform.apply(localOrigin);
+    newRect.width = Math.abs(newLocalPt.x - localOrigin.x);
+    newRect.height = oldRect.height; // y 不变
+    const scaleX = newLocalPt.x < localOrigin.x ? -1 : 1;
+    const scaleY = 1;
+    const scaleTransform = new Matrix().scale(scaleX, scaleY);
+    newRect.transform = newRect.transform.append(scaleTransform);
+    const newGlobalOrigin = newRect.transform.apply({
+      x: 0,
+      y: newRect.height / 2,
+    });
 
-    newRect.transform.translate(-offset.x, -offset.y);
+    const offset = {
+      x: globalOrigin.x - newGlobalOrigin.x,
+      y: globalOrigin.y - newGlobalOrigin.y,
+    };
+    newRect.transform.translate(offset.x, offset.y);
   }
   return newRect;
 };
@@ -216,7 +241,13 @@ canvas.addEventListener('pointermove', (e: PointerEvent) => {
 });
 
 canvas.addEventListener('click', () => {
-  const types = ['left-top', 'right-top', 'left-bottom', 'right-bottom'];
+  const types = [
+    'left-top',
+    'right-top',
+    'left-bottom',
+    'right-bottom',
+    'right',
+  ];
   const currIndex = types.find((t) => t === type);
 
   type = types[(types.indexOf(currIndex!) + 1) % types.length];
