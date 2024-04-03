@@ -25,7 +25,7 @@ let movedPt = {
   y: 0,
 };
 
-let type = 'right-bottom';
+let type = 'left-bottom';
 
 const draw = () => {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -112,6 +112,12 @@ img.onload = () => {
     y: oldRect.height,
   });
   draw();
+};
+
+const leftBottomOp = {
+  getLocalOrigin: (width: number, height: number) => {
+    return { x: 0, y: height };
+  },
 };
 
 const recomputeRectAttrs = (

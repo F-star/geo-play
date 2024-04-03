@@ -302,3 +302,14 @@ export const getExternalTanRegularPolygon = (
 
   return getInternalTanRegularPolygon(center, start, count);
 };
+
+/**
+ * 两个凸多边形是否相交
+ */
+export const isConvexPolygonIntersect = (
+  polygon1: Point[],
+  polygon2: Point[],
+) => {
+  // 分离轴定理
+  // TODO:
+};
