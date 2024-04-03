@@ -311,5 +311,64 @@ export const isConvexPolygonIntersect = (
   polygon2: Point[],
 ) => {
   // 分离轴定理
-  // TODO:
+  const axes = [
+    ...getConvexPolygonAxes(polygon1),
+    ...getConvexPolygonAxes(polygon2),
+  ];
+  for (const axis of axes) {
+    const projection1 = projectPolygon(axis, polygon1);
+    const projection2 = projectPolygon(axis, polygon2);
+    if (!isOverlap(projection1, projection2)) {
+      return false;
+    }
+  }
+};
+
+/**
+ * 获取凸多边形的所有轴
+ */
+const getConvexPolygonAxes = (polygon: Point[]) => {
+  const axes: Point[] = [];
+  for (let i = 0; i < polygon.length; i++) {
+    const p1 = polygon[i];
+    const p2 = polygon[(i + 1) % polygon.length];
+    const edge = { x: p2.x - p1.x, y: p2.y - p1.y };
+    const axis = { x: -edge.y, y: edge.x };
+    axes.push(normalize(axis));
+  }
+  return axes;
+};
+
+/**
+ * 投影多边形到轴上
+ */
+const projectPolygon = (axis: Point, polygon: Point[]) => {
+  let min = Infinity;
+  let max = -Infinity;
+  for (const p of polygon) {
+    const dot = p.x * axis.x + p.y * axis.y;
+    min = Math.min(min, dot);
+    max = Math.max(max, dot);
+  }
+  return { min, max };
+};
+
+/**
+ * 判断两个投影是否重叠
+ */
+const isOverlap = (
+  projection1: { min: number; max: number },
+  projection2: { min: number; max: number },
+) => {
+  return (
+    projection1.min <= projection2.max && projection2.min <= projection1.max
+  );
+};
+
+/**
+ * 归一化向量
+ */
+const normalize = (vector: Point) => {
+  const d = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
+  return { x: vector.x / d, y: vector.y / d };
 };
