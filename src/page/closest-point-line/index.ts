@@ -1,6 +1,5 @@
-import { drawLine, drawNumText, fillPoints } from '../../draw-util';
+import { drawLine, drawText, fillPoints } from '../../draw-util';
 import { closestPointOnLine } from '../../geo';
-import { randInt } from '../../util';
 
 const canvas = document.querySelector('canvas')!;
 const ctx = canvas.getContext('2d')!;
@@ -33,9 +32,9 @@ const draw = () => {
   fillPoints(ctx, [closetPt], 12);
   ctx.restore();
 
-  drawNumText(ctx, closetPt, `t: ${t.toFixed(3)}`, 'red');
-  drawNumText(ctx, closetPt, `dist: ${d.toFixed(3)}`, 'red', undefined, -30);
-  drawNumText(
+  drawText(ctx, closetPt, `t: ${t.toFixed(3)}`, 'red');
+  drawText(ctx, closetPt, `dist: ${d.toFixed(3)}`, 'red', undefined, -30);
+  drawText(
     ctx,
     closetPt,
     `point: (${closetPt.x.toFixed(1)}, ${closetPt.y.toFixed(1)})`,
@@ -43,9 +42,9 @@ const draw = () => {
     undefined,
     -50,
   );
-  drawNumText(ctx, p1, 'p0');
-  drawNumText(ctx, p2, 'p1');
-  drawNumText(ctx, p, 'p');
+  drawText(ctx, p1, 'p0');
+  drawText(ctx, p2, 'p1');
+  drawText(ctx, p, 'p');
 };
 
 draw();

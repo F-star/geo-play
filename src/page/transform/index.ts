@@ -1,5 +1,5 @@
 import { Matrix } from 'pixi.js';
-import { drawImg, drawNumText, fillPoints } from '../../draw-util';
+import { drawImg, drawText, fillPoints } from '../../draw-util';
 import imgUrl from './fe_watermelon.jpg';
 
 const canvas = document.querySelector('canvas')!;
@@ -98,12 +98,12 @@ const draw = () => {
   fillPoints(ctx, [movedPt], 12);
   ctx.restore();
 
-  drawNumText(ctx, leftTop, 'left-top');
-  drawNumText(ctx, rightTop, 'right-top');
-  drawNumText(ctx, leftBottom, 'left-bottom');
-  drawNumText(ctx, rightBottom, 'right-bottom');
+  drawText(ctx, leftTop, 'left-top');
+  drawText(ctx, rightTop, 'right-top');
+  drawText(ctx, leftBottom, 'left-bottom');
+  drawText(ctx, rightBottom, 'right-bottom');
   // drawNumText(ctx, movedPt, `${movedPt.x.toFixed(2)}, ${movedPt.y.toFixed(2)}`);
-  drawNumText(ctx, { x: 20, y: 40 }, `缩放的控制点为：${type}`);
+  drawText(ctx, { x: 20, y: 40 }, `缩放的控制点为：${type}`);
 };
 
 img.onload = () => {

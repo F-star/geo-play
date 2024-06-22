@@ -82,7 +82,7 @@ export const drawTextInCenter = (
   ctx.fillText(text, p.x, p.y);
 };
 
-export const drawNumText = (
+export const drawText = (
   ctx: CanvasRenderingContext2D,
   p: Point,
   text: string,

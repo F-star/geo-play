@@ -372,3 +372,40 @@ const normalize = (vector: Point) => {
   const d = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
   return { x: vector.x / d, y: vector.y / d };
 };
+
+/**
+ * 求两条直线交点
+ */
+export const getLineIntersection = (
+  p1: Point,
+  p2: Point,
+  p3: Point,
+  p4: Point,
+): Point | null => {
+  const { x: x1, y: y1 } = p1;
+  const { x: x2, y: y2 } = p2;
+  const { x: x3, y: y3 } = p3;
+  const { x: x4, y: y4 } = p4;
+
+  const a = y2 - y1;
+  const b = x1 - x2;
+  const c = x1 * y2 - x2 * y1;
+
+  const d = y4 - y3;
+  const e = x3 - x4;
+  const f = x3 * y4 - x4 * y3;
+
+  // 计算分母
+  const denominator = a * e - b * d;
+
+  // 判断分母是否为 0（代表平行）
+  if (Math.abs(denominator) < 0.000000001) {
+    // 这里有个特殊的重叠但只有一个交点的情况，可以考虑处理一下
+    return null;
+  }
+
+  const px = (c * e - f * b) / denominator;
+  const py = (a * f - c * d) / denominator;
+
+  return { x: px, y: py };
+};

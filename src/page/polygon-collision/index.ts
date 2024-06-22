@@ -1,4 +1,4 @@
-import { drawNumText, strokePolygon } from '../../draw-util';
+import { drawText, strokePolygon } from '../../draw-util';
 import { isConvexPolygonIntersect } from '../../geo';
 
 const canvas = document.querySelector('canvas')!;
@@ -34,7 +34,7 @@ const draw = () => {
   strokePolygon(ctx, polygon2);
 
   const isCollision = isConvexPolygonIntersect(polygon1, polygon2);
-  drawNumText(ctx, { x: 50, y: 50 }, isCollision ? '碰撞' : '未碰撞');
+  drawText(ctx, { x: 50, y: 50 }, isCollision ? '碰撞' : '未碰撞');
 
   ctx.restore();
 };

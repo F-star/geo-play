@@ -1,6 +1,6 @@
 import {
   drawLine,
-  drawNumText,
+  drawText,
   strokeCircle,
   strokePolygon,
 } from '../../draw-util';
@@ -51,9 +51,9 @@ const draw = () => {
     ctx.restore();
   }
 
-  drawNumText(ctx, center, 'center');
-  drawNumText(ctx, start, 'start');
-  drawNumText(ctx, { x: 20, y: 50 }, `count: ${count}`);
+  drawText(ctx, center, 'center');
+  drawText(ctx, start, 'start');
+  drawText(ctx, { x: 20, y: 50 }, `count: ${count}`);
 };
 
 draw();

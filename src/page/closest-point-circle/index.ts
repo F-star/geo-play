@@ -1,9 +1,4 @@
-import {
-  drawLine,
-  drawNumText,
-  fillPoints,
-  strokeCircle,
-} from '../../draw-util';
+import { drawLine, drawText, fillPoints, strokeCircle } from '../../draw-util';
 import { closestPointOnCircle } from '../../geo';
 
 const canvas = document.querySelector('canvas')!;
@@ -33,9 +28,9 @@ const draw = () => {
   fillPoints(ctx, [closetPt], 12);
   ctx.restore();
 
-  drawNumText(ctx, center, 'center');
-  drawNumText(ctx, closetPt, `dist: ${d.toFixed(3)}`, 'red', undefined, -30);
-  drawNumText(
+  drawText(ctx, center, 'center');
+  drawText(ctx, closetPt, `dist: ${d.toFixed(3)}`, 'red', undefined, -30);
+  drawText(
     ctx,
     closetPt,
     `point: (${closetPt.x.toFixed(1)}, ${closetPt.y.toFixed(1)})`,
@@ -43,7 +38,7 @@ const draw = () => {
     undefined,
     -50,
   );
-  drawNumText(ctx, p, 'p');
+  drawText(ctx, p, 'p');
 };
 
 draw();

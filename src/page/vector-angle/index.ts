@@ -1,4 +1,4 @@
-import { drawLine, drawNumText, fillPoints } from '../../draw-util';
+import { drawLine, drawText, fillPoints } from '../../draw-util';
 import { getAngle, getSweepAngle, radToDeg } from '../../geo';
 
 const canvas = document.querySelector('canvas')!;
@@ -21,12 +21,12 @@ const draw = () => {
 
   fillPoints(ctx, [origin, a, b], 12);
 
-  drawNumText(ctx, a, 'a');
-  drawNumText(ctx, b, 'b');
-  drawNumText(ctx, origin, 'origin');
+  drawText(ctx, a, 'a');
+  drawText(ctx, b, 'b');
+  drawText(ctx, origin, 'origin');
 
   const angle = isCalcSweepAngle ? getSweepAngle(a, b) : getAngle(a, b);
-  drawNumText(
+  drawText(
     ctx,
     { x: -100, y: -100 },
     `${isCalcSweepAngle ? '扫过的夹角' : '普通夹角'}: ${radToDeg(angle).toFixed(

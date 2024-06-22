@@ -1,4 +1,4 @@
-import { drawNumText, fillPoints } from '../../draw-util';
+import { drawText, fillPoints } from '../../draw-util';
 import { distance } from '../../geo';
 import { Point } from '../../type';
 import { getArc2Center, getArcPoint } from './geo';
@@ -19,9 +19,9 @@ const drawArc1 = (ctx: CanvasRenderingContext2D) => {
   const startPt = getArcPoint(center, radius, startAngle);
   const endPt = getArcPoint(center, radius, endAngle);
   fillPoints(ctx, [center, startPt, endPt]);
-  drawNumText(ctx, center, 'center');
-  drawNumText(ctx, startPt, 'start');
-  drawNumText(ctx, endPt, 'end');
+  drawText(ctx, center, 'center');
+  drawText(ctx, startPt, 'start');
+  drawText(ctx, endPt, 'end');
 };
 
 drawArc1(ctx);
