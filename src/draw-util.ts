@@ -56,6 +56,19 @@ export const drawLine = (
   ctx.stroke();
 };
 
+export const drawPolyline = (
+  ctx: CanvasRenderingContext2D,
+  pts: Point[]
+) => {
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x, pts[0].y);
+  for (let i = 1; i < pts.length; i++) {
+    ctx.lineTo(pts[i].x, pts[i].y)
+  }
+  ctx.stroke();
+};
+
+
 export const drawBezier = (
   ctx: CanvasRenderingContext2D,
   p1: Point,
