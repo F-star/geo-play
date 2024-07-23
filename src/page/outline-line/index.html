@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>对多段线做轮廓化（不含曲线）</title>
+    <title>对直线线段的轮廓线</title>
     <style>
       * {
         margin: 0;
@@ -18,7 +18,10 @@
   <body>
     <div id="app">
       <canvas width="500" height="500"></canvas>
-      <div>对多段线做轮廓化（不含曲线）</div>
+      <svg
+        style="pointer-events: none; position: fixed; top: 1px; left: 1px"
+      ></svg>
+      <div>求直线线段的轮廓线</div>
     </div>
     <script type="module" src="./index.ts"></script>
   </body>
