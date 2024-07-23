@@ -5,7 +5,7 @@ import { Point } from "../../type";
 export const outlineLineWithButtCap = (p1: Point, p2: Point, width: number) => {
   const tan = {
     x: p2.x - p1.x,
-    y: p2.y - p2.y
+    y: p2.y - p1.y
   }
 
   // 求直线法向量
