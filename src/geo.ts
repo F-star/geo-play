@@ -160,6 +160,13 @@ export const closestPointOnCircle = (
   };
 };
 
+export const lerp = (p1: Point, p2: Point, t: number) => {
+  return {
+    x: (1 - t) * p1.x + t * p2.x,
+    y: (1 - t) * p1.y + t * p2.y,
+  }
+}
+
 /**
  * 插值算法
  * 已知 p1 和 p2，求 p1 到 p2 方向，距离 dist 的点 p
