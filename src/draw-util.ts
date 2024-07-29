@@ -78,13 +78,13 @@ export const drawPolygon = (ctx: CanvasRenderingContext2D, pts: Point[]) => {
 export const drawBezier = (
   ctx: CanvasRenderingContext2D,
   p1: Point,
+  cp1: Point,
+  cp2: Point,
   p2: Point,
-  p3: Point,
-  p4: Point,
 ) => {
   ctx.beginPath();
   ctx.moveTo(p1.x, p1.y);
-  ctx.bezierCurveTo(p2.x, p2.y, p3.x, p3.y, p4.x, p4.y);
+  ctx.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, p2.x, p2.y);
   ctx.stroke();
 };
 
