@@ -40,8 +40,10 @@ export const calcBezier3Project = (
   lookupTable: { t: number; pt: Point }[] = [],
 ) => {
   const count = 100;
+
   if (lookupTable.length === 0) {
-    // 因为 t += step 这种写法会不断累加浮点数误差，所以换成 i / count 的写法
+    // 第一步是一定要执行的，缓存起来。
+    // 因为 t += step 这种写法会不断累加浮点数误差，稍微换成 i / count 的写法
     for (let i = 0; i <= count; i++) {
       const t = i / count;
       const pt = getBezier3Point(p1, cp1, cp2, p2, t);
@@ -58,7 +60,26 @@ export const calcBezier3Project = (
     if (dist < minDist) {
       minDist = dist;
       minIndex = i;
+      // 找到 0 距离点，提前结束
+      if (dist === 0) {
+        break;
+      }
     }
+  }
+
+  if (minDist === 0) {
+    const projectPt = getBezier3Point(
+      p1,
+      cp1,
+      cp2,
+      p2,
+      lookupTable[minIndex].t,
+    );
+    return {
+      point: projectPt,
+      t: lookupTable[minIndex].t,
+      dist: distance(targetPt, projectPt),
+    };
   }
 
   let minT = lookupTable[minIndex].t;
@@ -67,13 +88,18 @@ export const calcBezier3Project = (
   const t2 =
     minIndex < lookupTable.length - 1 ? lookupTable[minIndex + 1].t : minT;
 
-  let step = 0.001;
+  let step = 0.001; // 原来的 1/10
   for (let t = t1; t <= t2; t += step) {
+    c++;
     const pt = getBezier3Point(p1, cp1, cp2, p2, t);
     const dist = distance(targetPt, pt);
     if (dist < minDist) {
       minDist = dist;
       minT = t;
+      // 找到 0 距离点，提前结束
+      if (dist === 0) {
+        break;
+      }
     }
   }
 

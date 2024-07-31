@@ -1,6 +1,7 @@
 import {
   drawBezier,
   drawLine,
+  drawText,
   fillPoints,
   strokeCircle,
 } from '../../draw-util';
@@ -49,7 +50,7 @@ const draw = () => {
     lookupTable,
   );
 
-  console.log('projectInfo', projectInfo);
+  // console.log('projectInfo', projectInfo);
 
   ctx.strokeStyle = '#666';
   drawBezier(ctx, p1, cp1, cp2, p2);
@@ -58,6 +59,8 @@ const draw = () => {
   strokeCircle(ctx, targetPt, projectInfo.dist);
 
   drawLine(ctx, targetPt, projectInfo.point);
+
+  drawText(ctx, projectInfo.point, `t=${parseFloat(projectInfo.t.toFixed(3))}`);
 
   // 绘制点
   fillPoints(ctx, [targetPt, projectInfo.point], 6);
