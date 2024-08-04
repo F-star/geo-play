@@ -90,7 +90,6 @@ export const calcBezier3Project = (
 
   let step = 0.001; // 原来的 1/10
   for (let t = t1; t <= t2; t += step) {
-    c++;
     const pt = getBezier3Point(p1, cp1, cp2, p2, t);
     const dist = distance(targetPt, pt);
     if (dist < minDist) {
