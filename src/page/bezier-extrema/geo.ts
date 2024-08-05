@@ -30,10 +30,10 @@ const getRoot = (a: number, b: number, c: number) => {
     const deltaSquare = b * b - a * c;
     if (deltaSquare < 0) {
       // 负数，方程无实数根
+      debugger;
       return [];
     }
     const delta = Math.sqrt(deltaSquare);
-
     const m = a - b;
     if (delta === 0) {
       // 两个相等的实数根
@@ -43,7 +43,7 @@ const getRoot = (a: number, b: number, c: number) => {
       return [(m - delta) / d, (m + delta) / d];
     }
   } else if (a !== b) {
-    debugger;
+    // debugger;
     // d 为 0，代表一元二次方程的 x^2 前面的系数也是 0，退化为一元一次方程，只有一个解
     // 但也要确保 x 前的系数不为 0，否则连一次方程都不是了
     console.log('??', -a / (b - a) / 2);

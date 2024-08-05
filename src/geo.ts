@@ -164,8 +164,8 @@ export const lerp = (p1: Point, p2: Point, t: number) => {
   return {
     x: (1 - t) * p1.x + t * p2.x,
     y: (1 - t) * p1.y + t * p2.y,
-  }
-}
+  };
+};
 
 /**
  * 插值算法
@@ -415,4 +415,25 @@ export const getLineIntersection = (
   const py = (a * f - c * d) / denominator;
 
   return { x: px, y: py };
+};
+
+export const getPointsBbox = (points: Point[]) => {
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+
+  for (const pt of points) {
+    minX = Math.min(minX, pt.x);
+    minY = Math.min(minY, pt.y);
+    maxX = Math.max(maxX, pt.x);
+    maxY = Math.max(maxY, pt.y);
+  }
+
+  return {
+    minX,
+    minY,
+    maxX,
+    maxY,
+  };
 };

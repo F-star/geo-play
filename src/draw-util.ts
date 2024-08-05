@@ -22,6 +22,13 @@ export const strokePolygon = (
   ctx.stroke();
 };
 
+export const strokeBox = (
+  ctx: CanvasRenderingContext2D,
+  box: { minX: number; minY: number; maxX: number; maxY: number },
+) => {
+  ctx.strokeRect(box.minX, box.minY, box.maxX - box.minX, box.maxY - box.minY);
+};
+
 export const fillPoints = (
   ctx: CanvasRenderingContext2D,
   p: Point[],
