@@ -1,12 +1,13 @@
-import { Bezier } from 'bezier-js';
+// import { Bezier } from 'bezier-js';
 import {
   drawBezier,
   drawLine,
+  drawPolyline,
   drawText,
   fillPoints,
   strokeBox,
 } from '../../draw-util';
-import { bezier3Extrema } from './geo';
+import { bezier3Extrema, getBezier3Bbox, getXCurve } from './geo';
 import { getBezier3Point } from '../bezier-project/geo';
 import { distance, getPointsBbox } from '../../geo';
 import { Point } from '../../type';
@@ -54,11 +55,12 @@ const p2 = {
 const draw = () => {
   // 求极限值
   // const bezier = new Bezier([p1, cp1, cp2, p2]);
-  // const { values: extrema } = bezier.extrema();
+  // const { values: extremas } = bezier.extrema();
   const extremas = bezier3Extrema([p1, cp1, cp2, p2]);
   console.log('extrema', extremas);
   const extremaPts = extremas.map((t) => getBezier3Point(p1, cp1, cp2, p2, t));
-  const bbox = getPointsBbox([...extremaPts, p1, p2]);
+  // const bbox = getPointsBbox([...extremaPts, p1, p2]);
+  const bbox = getBezier3Bbox([p1, cp1, cp2, p2]);
 
   ctx.save();
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -68,23 +70,35 @@ const draw = () => {
   drawBezier(ctx, p1, cp1, cp2, p2);
 
   ctx.strokeStyle = '#999';
+  ctx.setLineDash([3]);
   drawLine(ctx, p1, cp1);
   drawLine(ctx, cp2, p2);
+  ctx.setLineDash([]);
 
-  ctx.strokeStyle = '#f04';
+  ctx.strokeStyle = 'blue';
   strokeBox(ctx, bbox);
 
   // 绘制点
   fillPoints(ctx, [p1, cp1, cp2, p2], 6);
 
   ctx.fillStyle = 'red';
-  fillPoints(ctx, extremaPts, 6);
+  fillPoints(ctx, extremaPts, 8);
 
-  // ctx.fillStyle = '#000';
   for (let i = 0; i < extremas.length; i++) {
     const text = `t=${extremas[i].toFixed(3)}`;
     drawText(ctx, extremaPts[i], text);
   }
+
+  const xCurve = getXCurve([p1, cp1, cp2, p2]);
+
+  ctx.strokeStyle = '#000';
+  ctx.translate(450, 0);
+  drawText(ctx, { x: 0, y: 100 }, 'x=f(t)');
+  drawPolyline(ctx, xCurve.x);
+
+  ctx.translate(220, 0);
+  drawText(ctx, { x: 0, y: 100 }, 'y=g(t)');
+  drawPolyline(ctx, xCurve.y);
 
   ctx.restore();
 };
@@ -107,7 +121,6 @@ canvas.addEventListener('mousedown', (e) => {
   if (!movedPt) return;
 
   const onMouseover = (e: MouseEvent) => {
-    console.log('移动');
     if (movedPt) {
       movedPt.x = e.clientX;
       movedPt.y = e.clientY;
