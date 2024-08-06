@@ -78,7 +78,7 @@ export const getXCurve = (pts: Point[], step = 100) => {
     x: [] as Point[],
     y: [] as Point[],
   };
-  for (let i = 0; i <= 100; i++) {
+  for (let i = 0; i <= step; i++) {
     const t = i / 100;
     const p = getBezier3Point(pts, t);
     curve.x.push({ x: t * 200, y: p.x });
