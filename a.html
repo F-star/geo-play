@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paper.js Mouse Drag Example</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.15/paper-full.min.js"></script>
+  <style>
+    canvas[resize] {
+      width: 900px;
+      height: 500px;
+      display: block;
+      margin: 0 auto;
+      background-color: #eee;
+  </style>
+</head>
+
+<body>
+  <canvas id="myCanvas" resize></canvas>
+  <script type="text/paperscript" canvas="myCanvas">
+    var rectangle = new Rectangle(new Point(20, 20), new Size(60, 60));
+
+
+		var box
+        // 鼠标点击事件  
+        function onMouseDown(event) {
+            // 创建一个初始圆形
+            box = new Path.Rectangle(rectangle);  
+            box.strokeColor = 'red'
+			console.log(box.width)
+        }  
+
+        // 鼠标拖动事件  
+        function onMouseDrag(event) {  
+
+          console.log('box.size', box.bounds.width)
+            // 实时更新圆形的半径以显示变化  
+            var width = event.point.x - view.center.x
+            box.bounds.width = width
+            
+            // box.set({ size: new Size(event.point.x - view.center.x, size.height) })
+        }  
+		function onMouseUp(event) {
+			console.log(box.width)
+		}
+    </script>
+</body>
+
+</html>
