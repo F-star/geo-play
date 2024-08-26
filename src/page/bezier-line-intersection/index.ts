@@ -2,6 +2,7 @@
 import { drawBezier, drawLine, fillPoints } from '../../draw-util';
 import { distance } from '../../geo';
 import { Point } from '../../type';
+import { getBezierAndLineIntersection } from './geo';
 
 const canvas = document.querySelector('canvas')!;
 const ctx = canvas.getContext('2d')!;
@@ -39,7 +40,11 @@ const line = [
 ];
 
 const draw = () => {
-  // 求极限值
+  // 交点
+  const [intersectionPts, alignedBezier] = getBezierAndLineIntersection(
+    bezierPts,
+    line,
+  );
 
   ctx.save();
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -47,6 +52,13 @@ const draw = () => {
   // 贝塞尔曲线
   ctx.strokeStyle = '#666';
   drawBezier(ctx, bezierPts[0], bezierPts[1], bezierPts[2], bezierPts[3]);
+  // drawBezier(
+  //   ctx,
+  //   alignedBezier[0],
+  //   alignedBezier[1],
+  //   alignedBezier[2],
+  //   alignedBezier[3],
+  // );
   // 绘制控制点线
   ctx.setLineDash([8]);
   drawLine(ctx, bezierPts[0], bezierPts[1]);
@@ -58,6 +70,11 @@ const draw = () => {
 
   // 绘制点
   fillPoints(ctx, [...bezierPts, ...line], 6);
+
+  fillPoints(
+    ctx,
+    intersectionPts.map((item) => item.point),
+  );
 
   ctx.restore();
 };
