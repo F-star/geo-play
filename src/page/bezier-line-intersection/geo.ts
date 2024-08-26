@@ -26,8 +26,23 @@ export const getBezierAndLineIntersection = (
 const roots3 = (a: number, b: number, c: number, d: number) => {
   if (a !== 0) {
     // 三次方程
-    const delta0 = b * b - 3 * a * c;
-    const delta1 = 2 * b * b * b;
+
+    // 转成三次项系数为 1 的形式
+    const p = (3 * a * c - b * b) / (3 * a * a);
+    const q =
+      2 * b * b * b - 9 * a * b * c + (27 * a * a * d) / (27 * a * a * a);
+
+    // 使用 "Cardano formula" 求根
+    const delta = 4 * p * p * p + 27 * q * q;
+
+    const halfQ = q / 2;
+    // const
+
+    if (delta < 0) {
+      return [];
+    }
+
+    // 转成没有二次项的形式
   } else {
     // 退化为二次方程
     return roots2(b, c, d);
