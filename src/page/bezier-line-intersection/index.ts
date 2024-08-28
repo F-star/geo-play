@@ -1,5 +1,11 @@
 // import { Bezier } from 'bezier-js';
-import { drawBezier, drawLine, fillPoints } from '../../draw-util';
+import {
+  drawBezier,
+  drawLine,
+  drawText,
+  drawTextInCenter,
+  fillPoints,
+} from '../../draw-util';
 import { distance } from '../../geo';
 import { Point } from '../../type';
 import { getBezierAndLineIntersection } from './geo';
@@ -41,10 +47,7 @@ const line = [
 
 const draw = () => {
   // 交点
-  const [intersectionPts, alignedBezier] = getBezierAndLineIntersection(
-    bezierPts,
-    line,
-  );
+  const intersectionPts = getBezierAndLineIntersection(bezierPts, line);
 
   ctx.save();
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -71,10 +74,15 @@ const draw = () => {
   // 绘制点
   fillPoints(ctx, [...bezierPts, ...line], 6);
 
+  ctx.fillStyle = '#f04';
   fillPoints(
     ctx,
     intersectionPts.map((item) => item.point),
+    8,
   );
+  intersectionPts.forEach((item) => {
+    drawText(ctx, item.point, item.t.toFixed(4));
+  });
 
   ctx.restore();
 };

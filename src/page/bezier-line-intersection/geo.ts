@@ -1,5 +1,6 @@
 import { Matrix } from 'pixi.js';
 import { Point } from '../../type';
+import { getPointsBbox, isPointInBox } from '../../geo';
 
 export const getBezierAndLineIntersection = (
   bezier: Point[],
@@ -22,52 +23,72 @@ export const getBezierAndLineIntersection = (
   const tArr = roots3(a, b, c, d);
   console.log(tArr);
 
-  return [
-    tArr
-      .filter((t) => t >= 0 && t <= 1)
-      .map((t) => {
-        return {
-          t,
-          point: getBezier3Point(bezier, t),
-        };
-      }),
-    alignedBezier,
-  ];
+  const lineBbox = getPointsBbox(line);
+
+  return tArr
+    .filter((t) => t >= 0 && t <= 1)
+    .map((t) => {
+      // 计算 t 对应的坐标
+      return {
+        t,
+        point: getBezier3Point(bezier, t),
+      };
+    })
+    .filter((item) => {
+      // 点也需要在线段内（需要判断点是否在线段包围盒内）
+      return isPointInBox(lineBbox, item.point);
+    });
 };
 
 /** 求一元三次方程的根 */
-const roots3 = (a: number, b: number, c: number, d: number) => {
-  if (a !== 0) {
+const roots3 = (w: number, a: number, b: number, c: number) => {
+  console.log({ w, a, b, c });
+  if (w !== 0) {
     // 三次方程
+    // https://www.trans4mind.com/personal_development/mathematics/polynomials/cubicAlgebra.htm
+    // 转成 x^3 + a * x^2 + b * x + c 的格式（三次项系数变成 1）
+    a /= w;
+    b /= w;
+    c /= w;
 
-    // 转成三次项系数为 1 的形式
-    const p = (3 * a * c - b * b) / (3 * a * a);
-    const q =
-      (2 * b * b * b - 9 * a * b * c + 27 * a * a * d) / (27 * a * a * a);
+    // 使用 "Cardano formula" 求根，转成没有二次项的形式（Depressed Cubic）
+    // t ^ 3 + p * t + q = 0
+    // 令 x = t - a / 3
+    const p = (3 * b - a * a) / 3;
+    const q = (2 * a * a * a - 9 * a * b + 27 * c) / 27;
 
-    // 使用 "Cardano formula" 求根
-
-    // 判别式
+    // 判别式 delta
     const delta = (q * q) / 4 + (p * p * p) / 27;
     console.log('delta', delta);
-    if (delta >= 0) {
-      debugger;
-      // 3 个解？
-      const halfQ = -q / 2;
-      const deltaSqrt = Math.sqrt(delta);
-      const u = cubicRoot(halfQ + deltaSqrt);
-      const v = cubicRoot(halfQ - deltaSqrt);
-      const t = u + v;
-      console.log('t', t);
-      return [t].filter((v) => v - b / (3 * a));
+    // 根有三个。
+    if (delta === 0) {
+      // 根都是实数根，且两个根相等，共两个不同的实数根
+      const t = cubicRoot(-q / 2);
+      const x1 = 2 * t - a / 3;
+      const x2 = t - a / 3;
+      return [x1, x2];
     }
-    // TODO: 待完成
-    return [];
-
-    // 转成没有二次项的形式
+    if (delta > 0) {
+      // 一个实数根，两个复数根（复数根我们不需要，直接丢掉）
+      const halfQ = q / 2;
+      const sqrtDelta = Math.sqrt(delta);
+      return [
+        cubicRoot(-halfQ + sqrtDelta) - cubicRoot(halfQ + sqrtDelta) - a / 3,
+      ];
+    }
+    // 三个不同实根
+    const r = Math.sqrt(Math.pow(-p / 3, 3));
+    // De Moivre's formula（棣莫弗公式）
+    const cosVal = Math.max(Math.min(-q / (2 * r), 1), -1); // 处理误差超出 cos 值区间的情况
+    const angle = Math.acos(cosVal);
+    const x1 = 2 * cubicRoot(r) * Math.cos(angle / 3) - a / 3;
+    const x2 = 2 * cubicRoot(r) * Math.cos((angle + Math.PI * 2) / 3) - a / 3;
+    const x3 = 2 * cubicRoot(r) * Math.cos((angle + Math.PI * 4) / 3) - a / 3;
+    return [x1, x2, x3];
   } else {
+    debugger;
     // 退化为二次方程
-    return roots2(b, c, d);
+    return roots2(a, b, c);
   }
 };
 
@@ -115,3 +136,43 @@ const getBezier3Point = (pts: Point[], t: number) => {
     y: a * p1.y + b * cp1.y + c * cp2.y + d * p2.y,
   };
 };
+
+/** 判断点是否在线段内（已知点在直线上） */
+// const isPtInSegment = () => {
+
+// }
+
+/** 求一元三次方程的根 */
+// const roots3_old = (a: number, b: number, c: number, d: number) => {
+//   if (a !== 0) {
+//     // 三次方程
+//     // 转成三次项系数为 1 的形式
+//     const p = (3 * a * c - b * b) / (3 * a * a);
+//     const q =
+//       (2 * b * b * b - 9 * a * b * c + 27 * a * a * d) / (27 * a * a * a);
+
+//     // 使用 "Cardano formula" 求根
+
+//     // 判别式
+//     const delta = (q * q) / 4 + (p * p * p) / 27;
+//     console.log('delta', delta);
+//     if (delta >= 0) {
+//       debugger;
+//       // 3 个解？
+//       const halfQ = -q / 2;
+//       const deltaSqrt = Math.sqrt(delta);
+//       const u = cubicRoot(halfQ + deltaSqrt);
+//       const v = cubicRoot(halfQ - deltaSqrt);
+//       const t = u + v;
+//       console.log('t', t);
+//       return [t].filter((v) => v - b / (3 * a));
+//     }
+//     // TODO: 待完成
+//     return [];
+
+//     // 转成没有二次项的形式
+//   } else {
+//     // 退化为二次方程
+//     return roots2(b, c, d);
+//   }
+// };

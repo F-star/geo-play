@@ -1,5 +1,5 @@
 import { Matrix } from 'pixi.js';
-import { Point } from './type';
+import { Box, Point } from './type';
 
 export const distance = (p1: Point, p2: Point) => {
   const dx = p2.x - p1.x;
@@ -436,4 +436,13 @@ export const getPointsBbox = (points: Point[]) => {
     maxX,
     maxY,
   };
+};
+
+export const isPointInBox = (box: Box, point: Point, tol = 0) => {
+  return (
+    point.x >= box.minX - tol &&
+    point.y >= box.minY - tol &&
+    point.x <= box.maxX + tol &&
+    point.y <= box.maxY + tol
+  );
 };
