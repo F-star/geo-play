@@ -11,6 +11,16 @@ export const getBezierAndLineIntersection = (
   const matrix = new Matrix().translate(-line[0].x, -line[0].y).rotate(angle);
 
   const alignedBezier = bezier.map((pt) => matrix.apply(pt));
+  // const alignedBezier = bezier.map((pt) => {
+  //   return {
+  //     x:
+  //       (pt.x - line[0].x) * Math.cos(angle) -
+  //       (pt.y - line[0].y) * Math.sin(angle),
+  //     y:
+  //       (pt.x - line[0].x) * Math.sin(angle) +
+  //       (pt.y - line[0].y) * Math.cos(angle),
+  //   };
+  // });
   const [y0, y1, y2, y3] = alignedBezier.map((pt) => pt.y);
 
   // 2. 求对齐后的贝塞尔曲线和直线 y=0 的交点
@@ -21,8 +31,6 @@ export const getBezierAndLineIntersection = (
   const d = y0;
 
   const tArr = roots3(a, b, c, d);
-  console.log(tArr);
-
   const lineBbox = getPointsBbox(line);
 
   return tArr
@@ -42,7 +50,6 @@ export const getBezierAndLineIntersection = (
 
 /** 求一元三次方程的根 */
 const roots3 = (w: number, a: number, b: number, c: number) => {
-  console.log({ w, a, b, c });
   if (w !== 0) {
     // 三次方程
     // https://www.trans4mind.com/personal_development/mathematics/polynomials/cubicAlgebra.htm
@@ -59,7 +66,6 @@ const roots3 = (w: number, a: number, b: number, c: number) => {
 
     // 判别式 delta
     const delta = (q * q) / 4 + (p * p * p) / 27;
-    console.log('delta', delta);
     // 根有三个。
     if (delta === 0) {
       // 根都是实数根，且两个根相等，共两个不同的实数根
@@ -86,20 +92,22 @@ const roots3 = (w: number, a: number, b: number, c: number) => {
     const x3 = 2 * cubicRoot(r) * Math.cos((angle + Math.PI * 4) / 3) - a / 3;
     return [x1, x2, x3];
   } else {
-    debugger;
     // 退化为二次方程
     return roots2(a, b, c);
   }
 };
 
 const cubicRoot = (num: number) => {
+  // num 如果是负数，Math.pow 就会返回 NaN，即使是开立方。
+  // 所以要特殊处理下，先转成正数计算完再把符号加上
   return num > 0 ? Math.pow(num, 1 / 3) : -Math.pow(-num, 1 / 3);
 };
 
 /** 求一元二次方程的根 */
 const roots2 = (a: number, b: number, c: number) => {
   if (a !== 0) {
-    const delta = c * c - 4 * b * c;
+    // const delta = c * c - 4 * b * c;
+    const delta = b * b - 4 * a * c;
     if (delta < 0) {
       // 无实数根
       return [];
@@ -155,16 +163,13 @@ const getBezier3Point = (pts: Point[], t: number) => {
 
 //     // 判别式
 //     const delta = (q * q) / 4 + (p * p * p) / 27;
-//     console.log('delta', delta);
 //     if (delta >= 0) {
-//       debugger;
 //       // 3 个解？
 //       const halfQ = -q / 2;
 //       const deltaSqrt = Math.sqrt(delta);
 //       const u = cubicRoot(halfQ + deltaSqrt);
 //       const v = cubicRoot(halfQ - deltaSqrt);
 //       const t = u + v;
-//       console.log('t', t);
 //       return [t].filter((v) => v - b / (3 * a));
 //     }
 //     // TODO: 待完成
