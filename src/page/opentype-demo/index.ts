@@ -4,14 +4,14 @@ const canvas = document.querySelector('canvas')!;
 const ctx = canvas.getContext('2d')!;
 
 const main = async () => {
-  const buffer = await fetch('./fonts/SmileySans-Oblique.otf').then((res) =>
+  const buffer = await fetch('../../fonts/SmileySans-Oblique.otf').then((res) =>
     res.arrayBuffer(),
   );
 
   const font = opentype.parse(buffer);
   console.log(font);
 
-  console.log(Font.palettes);
+  // console.log(Font.palettes);
   // palettes
 
   const textPath = font.getPaths('永A', 0, 0, 24);
