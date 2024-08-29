@@ -1,11 +1,4 @@
-// import { Bezier } from 'bezier-js';
-import {
-  drawBezier,
-  drawLine,
-  drawText,
-  drawTextInCenter,
-  fillPoints,
-} from '../../draw-util';
+import { drawBezier, drawLine, drawText, fillPoints } from '../../draw-util';
 import { distance } from '../../geo';
 import { Point } from '../../type';
 import { getBezierAndLineIntersection } from './geo';
