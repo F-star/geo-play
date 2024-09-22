@@ -1,10 +1,12 @@
+import { SVG } from '@svgdotjs/svg.js';
 import opentype, { Font } from 'opentype.js';
 
 const canvas = document.querySelector('canvas')!;
 const ctx = canvas.getContext('2d')!;
 
 const main = async () => {
-  const buffer = await fetch('../../fonts/SmileySans-Oblique.otf').then((res) =>
+  const buffer = await fetch('../../fonts/FiraCode-Regular.woff').then((res) =>
+    // const buffer = await fetch('../../fonts/FiraCode-Regular.woff').then((res) =>
     res.arrayBuffer(),
   );
 
@@ -13,13 +15,37 @@ const main = async () => {
 
   // console.log(Font.palettes);
   // palettes
+  const x = 60;
+  const y = 60;
+  const fontSize = 24;
 
-  const textPath = font.getPaths('永A', 0, 0, 24);
-  console.log(textPath);
+  const text = '!==';
+  const textPaths = [
+    font.getPath(text, x, y, fontSize, {
+      features: { liga: true },
+    }),
+  ];
+  console.log(textPaths);
 
-  const text = '永fAV';
-  font.draw(ctx, text, 200, 200, 100);
-  font.drawMetrics(ctx, text, 200, 200, 100);
+  // Canvas 2D 渲染
+  debugger;
+  font.draw(ctx, text, x, y, fontSize, {
+    kerning: true,
+    features: {
+      liga: true,
+      rlig: true,
+    },
+  });
+  // font.drawMetrics(ctx, text, x, y, fontSize);
+
+  // svg 渲染
+  const pathDatas = textPaths.map((item) => item.toPathData(4));
+  console.log(pathDatas);
+
+  const svgDraw = SVG().addTo('body').size(700, 600);
+  for (const d of pathDatas) {
+    svgDraw.path(d);
+  }
 
   // 获取 glyph 对象
   console.log(font.charToGlyph('永A'));

@@ -15,7 +15,7 @@ importers:
         specifier: ^6.1.4
         version: 6.1.4
       opentype.js:
-        specifier: ^1.3.4
+        specifier: 1.3.4
         version: 1.3.4
       pixi.js:
         specifier: ^8.3.0
@@ -28,8 +28,8 @@ importers:
         specifier: ^4.1.3
         version: 4.1.3
       '@types/opentype.js':
-        specifier: ^1.3.8
-        version: 1.3.8
+        specifier: 1.3.4
+        version: 1.3.4
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -265,8 +265,8 @@ packages:
   '@types/estree@1.0.5':
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
 
-  '@types/opentype.js@1.3.8':
-    resolution: {integrity: sha512-H6qeTp03jrknklSn4bpT1/9+1xCAEIU2CnjcWPkicJy8A1SKuthanbvoHYMiv79/2W3Xn1XE4gfSJFzt2U3JSw==}
+  '@types/opentype.js@1.3.4':
+    resolution: {integrity: sha512-6fbXi67I07ugNM+FExwJnfuui2hD7hraD6nqjr3UnqsbBpxSkrtmO6tBubPdNAjqRT9TVkquVkNS9IkgTtq6/w==}
 
   '@webgpu/types@0.1.40':
     resolution: {integrity: sha512-/BBkHLS6/eQjyWhY2H7Dx5DHcVrS2ICj9owvSRdgtQT6KcafLZA86tPze0xAOsd4FbsYKCUBUQyNi87q7gV7kw==}
@@ -505,7 +505,7 @@ snapshots:
 
   '@types/estree@1.0.5': {}
 
-  '@types/opentype.js@1.3.8': {}
+  '@types/opentype.js@1.3.4': {}
 
   '@webgpu/types@0.1.40': {}
 
