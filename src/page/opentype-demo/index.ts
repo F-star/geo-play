@@ -5,9 +5,10 @@ const canvas = document.querySelector('canvas')!;
 const ctx = canvas.getContext('2d')!;
 
 const main = async () => {
-  const buffer = await fetch('../../fonts/FiraCode-Regular.woff').then((res) =>
-    // const buffer = await fetch('../../fonts/FiraCode-Regular.woff').then((res) =>
-    res.arrayBuffer(),
+  const buffer = await fetch('../../fonts/SourceHanSansCN-Regular.otf').then(
+    (res) =>
+      // const buffer = await fetch('../../fonts/FiraCode-Regular.woff').then((res) =>
+      res.arrayBuffer(),
   );
 
   const font = opentype.parse(buffer);
@@ -16,36 +17,36 @@ const main = async () => {
   // console.log(Font.palettes);
   // palettes
   const x = 60;
-  const y = 60;
+  const y = 160;
   const fontSize = 24;
 
-  const text = '!==';
-  const textPaths = [
-    font.getPath(text, x, y, fontSize, {
-      features: { liga: true },
-    }),
-  ];
-  console.log(textPaths);
+  const text = '前端西瓜哥/Ab1';
+  const textPath = font.getPath(text, x, y, fontSize, {
+    features: { liga: true },
+  });
+
+  const glyphs = font.stringToGlyphs('!=');
+  console.log(glyphs);
+  // textPaths.push(glyph.path);
+  console.log(textPath);
 
   // Canvas 2D 渲染
-  debugger;
   font.draw(ctx, text, x, y, fontSize, {
-    kerning: true,
     features: {
       liga: true,
       rlig: true,
     },
   });
-  // font.drawMetrics(ctx, text, x, y, fontSize);
+  // font.drawPoints(ctx, text, x, y, fontSize);
+  font.drawMetrics(ctx, text, x, y, fontSize);
 
   // svg 渲染
-  const pathDatas = textPaths.map((item) => item.toPathData(4));
-  console.log(pathDatas);
+  const pathData = textPath.toPathData(4);
+  // console.log(pathData);
 
   const svgDraw = SVG().addTo('body').size(700, 600);
-  for (const d of pathDatas) {
-    svgDraw.path(d);
-  }
+
+  svgDraw.path(pathData);
 
   // 获取 glyph 对象
   console.log(font.charToGlyph('永A'));
