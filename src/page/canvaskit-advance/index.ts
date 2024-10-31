@@ -42,8 +42,6 @@ const main = async () => {
   booleanPath.op(circlePath, CanvasKit.PathOp.Intersect); // 布尔使用
   console.log(booleanPath.toSVGString());
 
-  CanvasKit.PathOp.ReverseDifference;
-
   // 绘制
   canvas.drawPath(booleanPath, fillPaint);
   canvas.drawPath(rectPath, strokePaint);
