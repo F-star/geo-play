@@ -1,4 +1,5 @@
 import {
+  arcToCubic,
   circleToCubic,
   ellipseToCubic,
   quarterCircleToCubic,
@@ -9,7 +10,7 @@ const ctx = canvas.getContext('2d')!;
 
 const circle = {
   cx: 250,
-  cy: 150,
+  cy: 350,
   r: 100,
 };
 
@@ -20,8 +21,12 @@ const ellipse = {
   ry: 50,
 };
 
+let startAngle = 0;
+let endAngle = 0;
+
 const draw = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.save();
 
   // 绘制圆形
   ctx.beginPath();
@@ -30,7 +35,18 @@ const draw = () => {
   ctx.fill();
 
   // 绘制贝塞尔拟合
-  const pathData = circleToCubic(circle.cx, circle.cy, circle.r);
+  // const pathData = circleToCubic(circle.cx, circle.cy, circle.r);
+  // drawPath(ctx, pathData);
+  // drawControlPoints(ctx, pathData);
+
+  // 绘制任意圆弧
+  const pathData = arcToCubic(
+    circle.cx,
+    circle.cy,
+    circle.r,
+    startAngle,
+    endAngle,
+  );
   drawPath(ctx, pathData);
   drawControlPoints(ctx, pathData);
 
@@ -44,28 +60,29 @@ const draw = () => {
   // drawControlPoints(ctx, pathData2);
 
   // 绘制椭圆
-  ctx.beginPath();
-  ctx.ellipse(
-    ellipse.cx,
-    ellipse.cy,
-    ellipse.rx,
-    ellipse.ry,
-    0,
-    0,
-    Math.PI * 2,
-  );
-  ctx.fillStyle = '#dddddd';
-  ctx.fill();
+  // ctx.beginPath();
+  // ctx.ellipse(
+  //   ellipse.cx,
+  //   ellipse.cy,
+  //   ellipse.rx,
+  //   ellipse.ry,
+  //   0,
+  //   0,
+  //   Math.PI * 2,
+  // );
+  // ctx.fillStyle = '#dddddd';
+  // ctx.fill();
 
   // 绘制椭圆贝塞尔拟合
-  const pathData3 = ellipseToCubic(
-    ellipse.cx,
-    ellipse.cy,
-    ellipse.rx,
-    ellipse.ry,
-  );
-  drawPath(ctx, pathData3);
-  drawControlPoints(ctx, pathData3);
+  // const pathData3 = ellipseToCubic(
+  //   ellipse.cx,
+  //   ellipse.cy,
+  //   ellipse.rx,
+  //   ellipse.ry,
+  // );
+  // drawPath(ctx, pathData3);
+  // drawControlPoints(ctx, pathData3);
+  ctx.restore();
 };
 
 const drawPath = (
@@ -142,3 +159,15 @@ const drawControlPoints = (
 };
 
 draw();
+
+const startAnimation = () => {
+  setInterval(() => {
+    endAngle += Math.PI / 50;
+    startAngle -= Math.PI / 100;
+    draw();
+  }, 30);
+};
+
+canvas.addEventListener('click', () => {
+  startAnimation();
+});
