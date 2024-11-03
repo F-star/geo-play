@@ -40,6 +40,7 @@ const main = async () => {
   // 进行布尔运算
   const booleanPath = rectPath.copy();
   booleanPath.op(circlePath, CanvasKit.PathOp.Intersect); // 布尔使用
+  console.log(booleanPath.toCmds());
   console.log(booleanPath.toSVGString());
 
   // 绘制
