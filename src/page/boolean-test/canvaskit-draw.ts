@@ -9,7 +9,6 @@ export const canvaskitDraw = async (
     path1: IPathData;
     path2: IPathData;
   }[],
-
   tf?: Matrix,
 ) => {
   const blackStroke = new CanvasKit.Paint();
@@ -41,6 +40,8 @@ export const canvaskitDraw = async (
   blueFill.setStyle(CanvasKit.PaintStyle.Fill);
   blueFill.setAntiAlias(true);
 
+  // TODO: text
+
   const pathOps = [
     CanvasKit.PathOp.Intersect,
     CanvasKit.PathOp.Union,
@@ -57,7 +58,7 @@ export const canvaskitDraw = async (
   if (tf) {
     canvas.concat([tf.a, tf.c, tf.tx, tf.b, tf.d, tf.ty]);
   }
-  canvas.translate(10, 10);
+  canvas.translate(40, 40);
 
   for (const path of paths) {
     canvas.save();
@@ -94,6 +95,7 @@ export const canvaskitDraw = async (
   canvas.restore();
 
   surface.flush();
+
   blackStroke.delete();
   greyStroke.delete();
   booleanFill.delete();
