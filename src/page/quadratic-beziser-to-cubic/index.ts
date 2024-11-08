@@ -6,24 +6,27 @@ const canvas = document.querySelector('canvas')!;
 const ctx = canvas.getContext('2d')!;
 
 // 二阶贝塞尔曲线控制点
-const q0 = { x: 100, y: 100 };
-const q1 = { x: 200, y: 300 };
-const q2 = { x: 300, y: 100 };
+const q0 = { x: 100, y: 300 };
+const q1 = { x: 200, y: 150 };
+const q2 = { x: 300, y: 300 };
 
 const draw = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // 绘制二阶贝塞尔曲线
+
+  // 半透明
+  ctx.strokeStyle = 'rgba(0, 0, 0, 1)';
+  // ctx.lineWidth = 6;
+
   ctx.beginPath();
   ctx.moveTo(q0.x, q0.y);
   ctx.quadraticCurveTo(q1.x, q1.y, q2.x, q2.y);
-  // 半透明
-  ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
-  ctx.lineWidth = 6;
   ctx.stroke();
 
-  // 绘制三阶贝塞尔曲线
   const [c0, c1, c2, c3] = quadraticBezierToCubic(q0, q1, q2);
+
+  // 绘制三阶贝塞尔曲线
   ctx.beginPath();
   ctx.moveTo(c0.x, c0.y);
   ctx.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, c3.x, c3.y);
@@ -41,10 +44,11 @@ const draw = () => {
   drawPoint(q1, 'rgba(0, 0, 255, 0.5)');
 
   // 绘制三阶贝塞尔的 c1、c2 控制点
-  drawLine(c0, c1, 'rgba(0, 255, 0, 0.5)');
-  drawPoint(c1, 'rgba(0, 255, 0, 0.5)');
-  drawLine(c2, c3, 'rgba(0, 255, 0, 0.5)');
-  drawPoint(c2, 'rgba(0, 255, 0, 0.5)');
+
+  drawLine(c0, c1, 'rgba(255, 0, 0, 1)');
+  drawPoint(c1, 'rgba(255, 0, 0, 1)');
+  drawLine(c2, c3, 'rgba(255, 0, 0, 1)');
+  drawPoint(c2, 'rgba(255, 0, 0, 1)');
 };
 
 const drawPoint = (pt: Point, color: string) => {

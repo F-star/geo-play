@@ -10,7 +10,7 @@ const cp1 = { x: 120, y: 160 };
 const cp2 = { x: 350, y: 100 };
 const p2 = { x: 300, y: 50 };
 
-let mousePos: Point = { x: 200, y: 100 };
+let mousePos: Point = { x: 0, y: 0 };
 
 const draw = () => {
   ctx.save();
