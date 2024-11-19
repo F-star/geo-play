@@ -22,8 +22,6 @@ const draw = (
   paint2.setColor(CanvasKit.Color4f(0, 1, 0, 0.5));
   paint2.setBlendMode(blendMode);
 
-  console.log(paint2);
-
   // const paint3 = new CanvasKit.Paint();
   // paint3.setColor(CanvasKit.Color4f(0, 1, 0, 1));
 
@@ -31,12 +29,12 @@ const draw = (
   const rect2 = CanvasKit.XYWHRect(150, 150, 100, 100);
 
   surface.drawOnce((canvas) => {
-    canvas.clear(CanvasKit.WHITE);
+    // canvas.clear(CanvasKit.WHITE);
 
-    canvas.drawRRect(rect1, paint1);
+    canvas.drawRect(rect1, paint1);
 
     // canvas.saveLayer(paint2);
-    canvas.drawRRect(rect2, paint2);
+    canvas.drawRect(rect2, paint2);
     // canvas.restore();
   });
 };
@@ -47,13 +45,13 @@ const main = async () => {
   });
 
   const blendModes = [
+    [CanvasKit.BlendMode.DstIn, 'dstIn'],
+    [CanvasKit.BlendMode.SrcIn, 'srcIn'],
     [CanvasKit.BlendMode.Clear, 'clear'],
     [CanvasKit.BlendMode.Src, 'src'],
     [CanvasKit.BlendMode.Dst, 'dst'],
     [CanvasKit.BlendMode.SrcOver, 'srcOver'],
     [CanvasKit.BlendMode.DstOver, 'dstOver'],
-    [CanvasKit.BlendMode.SrcIn, 'srcIn'],
-    [CanvasKit.BlendMode.DstIn, 'dstIn'],
     [CanvasKit.BlendMode.SrcOut, 'srcOut'],
     [CanvasKit.BlendMode.DstOut, 'dstOut'],
     [CanvasKit.BlendMode.SrcATop, 'srcATop'],

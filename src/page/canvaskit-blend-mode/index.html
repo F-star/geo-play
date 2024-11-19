@@ -19,8 +19,10 @@
         /* border: 1px solid #000; */
       }
       #info {
+        display: inline-block;
         padding: 10px;
         font-size: 18px;
+        background-color: #000;
         color: #fff;
       }
     </style>
@@ -28,7 +30,9 @@
 
   <body>
     <canvas id="stage" width="350" height="350"></canvas>
-    <div id="info"></div>
+    <div>
+      <span id="info"></span>
+    </div>
     <script type="module" src="./index.ts"></script>
   </body>
 </html>
