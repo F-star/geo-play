@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>求多边形的最小矩形</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      canvas {
+        border: 1px solid #000;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <canvas width="700" height="600"></canvas>
+      <div>
+        求多边形的 “最小”。
+        包围矩形。这里的最小矩形，有前置条件的：就是矩形至少有一条边，需要和多边形的一条边平行
+      </div>
+    </div>
+    <script type="module" src="./index.ts"></script>
+  </body>
+</html>
