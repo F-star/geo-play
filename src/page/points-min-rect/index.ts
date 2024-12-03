@@ -5,9 +5,48 @@ const canvas = document.querySelector('canvas')!;
 const ctx = canvas.getContext('2d')!;
 
 const points: Point[] = [];
+// [
+//   {
+//     x: 82,
+//     y: 279,
+//   },
+//   {
+//     x: 212,
+//     y: 446,
+//   },
+//   {
+//     x: 340,
+//     y: 425,
+//   },
+//   {
+//     x: 383,
+//     y: 310,
+//   },
+//   {
+//     x: 430,
+//     y: 352,
+//   },
+//   {
+//     x: 492,
+//     y: 215,
+//   },
+//   {
+//     x: 418,
+//     y: 266,
+//   },
+//   {
+//     x: 330,
+//     y: 184,
+//   },
+//   {
+//     x: 267,
+//     y: 316,
+//   },
+//   { x: 158, y: 205 },
+// ];
 let nextPoint: Point | null = null;
 
-const d = 30;
+const d = 24;
 
 const draw = () => {
   ctx.save();
@@ -23,7 +62,7 @@ const draw = () => {
     const { dims, dirVecs, rectVertices } =
       getPolygonMinRectVertices(allPoints);
 
-    console.log('dirVecs', dirVecs);
+    // console.log('dirVecs', dirVecs);
 
     ctx.strokeStyle = 'red';
     ctx.fillStyle = 'red';
@@ -31,6 +70,7 @@ const draw = () => {
 
     ctx.strokeStyle = 'blue';
     ctx.fillStyle = 'blue';
+    console.log('dims', dims);
     for (let i = 0; i < dims.length; i++) {
       // 偏移 d 距离
       dims[i].forEach((pt) => {
