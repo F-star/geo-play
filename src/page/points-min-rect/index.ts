@@ -7,6 +7,8 @@ const ctx = canvas.getContext('2d')!;
 const points: Point[] = [];
 let nextPoint: Point | null = null;
 
+const d = 30;
+
 const draw = () => {
   ctx.save();
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -18,10 +20,25 @@ const draw = () => {
   }
   drawPolygon(ctx, allPoints);
   if (allPoints.length > 2) {
-    const vertices = getPolygonMinRectVertices(allPoints);
+    const { dims, dirVecs, rectVertices } =
+      getPolygonMinRectVertices(allPoints);
+
+    console.log('dirVecs', dirVecs);
+
     ctx.strokeStyle = 'red';
     ctx.fillStyle = 'red';
-    drawPolygon(ctx, vertices);
+    drawPolygon(ctx, rectVertices, true);
+
+    ctx.strokeStyle = 'blue';
+    ctx.fillStyle = 'blue';
+    for (let i = 0; i < dims.length; i++) {
+      // 偏移 d 距离
+      dims[i].forEach((pt) => {
+        pt.x += d * dirVecs[i].x;
+        pt.y += d * dirVecs[i].y;
+      });
+      drawPolygon(ctx, dims[i], true);
+    }
   }
 
   ctx.restore();
@@ -40,17 +57,25 @@ const drawPoint = (ctx: CanvasRenderingContext2D, pt: Point) => {
   ctx.fill();
 };
 
-const drawPolygon = (ctx: CanvasRenderingContext2D, pts: Point[]) => {
+const drawPolygon = (
+  ctx: CanvasRenderingContext2D,
+  pts: Point[],
+  showIndex = false,
+) => {
   for (let i = 0; i < pts.length; i++) {
     // 绘制点
     drawPoint(ctx, pts[i]);
     drawLine(ctx, pts[i], pts[(i + 1) % pts.length]);
+
+    if (showIndex) {
+      ctx.fillText(`${i}`, pts[i].x + 5, pts[i].y - 5);
+    }
   }
 };
 
 draw();
 
-window.addEventListener('mousedown', (e) => {
+canvas.addEventListener('mousedown', (e) => {
   points.push({
     x: e.clientX,
     y: e.clientY,
@@ -58,7 +83,7 @@ window.addEventListener('mousedown', (e) => {
   draw();
 });
 
-window.addEventListener('mousemove', (e) => {
+canvas.addEventListener('mousemove', (e) => {
   const x = e.clientX;
   const y = e.clientY;
   nextPoint = { x, y };
