@@ -161,7 +161,7 @@ const getPointsBbox = (points: Point[]) => {
 
 /**
  * pt 是 polygon 上的一个端点
- * 判断 [0, pt.y] 到 [pt.x, pt.y] 线段和 polygon 的交点个数
+ * 判断 [pt.x, 0] 到 [pt.x, pt.y] 线段和 polygon 的交点个数
  */
 const hasOneIntersectedCountPt = (polygon: Point[], pt: Point): boolean => {
   for (let i = 0; i < polygon.length; i++) {
@@ -200,10 +200,10 @@ export const getPerpendicularVecs = (rectVertices: Point[]) => {
   return vecs;
 };
 
-function isSegmentIntersect(
+const isSegmentIntersect = (
   seg1: [Point, Point],
   seg2: [Point, Point],
-): boolean {
+): boolean => {
   const [a, b] = seg1;
   const [c, d] = seg2;
 
@@ -212,5 +212,27 @@ function isSegmentIntersect(
   const d3 = crossProduct(c, d, a);
   const d4 = crossProduct(c, d, b);
 
-  return d1 * d2 < 0 && d3 * d4 < 0;
-}
+  if (d1 * d2 < 0 && d3 * d4 < 0) {
+    return true;
+  }
+
+  // d1 为 0 表示 C 点在 AB 所在的直线上
+  // 接着会用 onSegment 再判断这个 C 是不是在 AB 的 x 和 y 的范围内
+  if (d1 === 0 && onSegment(c, seg1)) return true;
+  if (d2 === 0 && onSegment(d, seg1)) return true;
+  if (d3 === 0 && onSegment(a, seg2)) return true;
+  if (d4 === 0 && onSegment(b, seg2)) return true;
+
+  return false;
+};
+
+const onSegment = (p: Point, seg: [Point, Point]): boolean => {
+  const [a, b] = seg;
+  const { x, y } = p;
+  return (
+    x >= Math.min(a.x, b.x) &&
+    x <= Math.max(a.x, b.x) &&
+    y >= Math.min(a.y, b.y) &&
+    y <= Math.max(a.y, b.y)
+  );
+};

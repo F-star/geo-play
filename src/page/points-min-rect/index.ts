@@ -4,7 +4,26 @@ import { getPolygonMinRectVertices } from './points-min-rect';
 const canvas = document.querySelector('canvas')!;
 const ctx = canvas.getContext('2d')!;
 
-const points: Point[] = [];
+const points: Point[] =
+  // [];
+
+  // 正多边形
+  [
+    { x: 213.5, y: 84 },
+    { x: 291.011, y: 140.315 },
+    { x: 261.404, y: 231.435 },
+    { x: 165.596, y: 231.435 },
+    { x: 135.989, y: 140.315 },
+  ];
+
+// 方形
+// [
+//   { x: 100, y: 100 },
+//   { x: 200, y: 100 },
+//   { x: 200, y: 200 },
+//   { x: 100, y: 200 },
+// ];
+// 不规则多边形
 // [
 //   {
 //     x: 82,
@@ -123,9 +142,9 @@ canvas.addEventListener('mousedown', (e) => {
   draw();
 });
 
-canvas.addEventListener('mousemove', (e) => {
-  const x = e.clientX;
-  const y = e.clientY;
-  nextPoint = { x, y };
-  draw();
-});
+// canvas.addEventListener('mousemove', (e) => {
+//   const x = e.clientX;
+//   const y = e.clientY;
+//   nextPoint = { x, y };
+//   draw();
+// });
