@@ -142,9 +142,9 @@ canvas.addEventListener('mousedown', (e) => {
   draw();
 });
 
-// canvas.addEventListener('mousemove', (e) => {
-//   const x = e.clientX;
-//   const y = e.clientY;
-//   nextPoint = { x, y };
-//   draw();
-// });
+canvas.addEventListener('mousemove', (e) => {
+  const x = e.clientX;
+  const y = e.clientY;
+  nextPoint = { x, y };
+  draw();
+});
