@@ -174,7 +174,7 @@ const hasOneIntersectedCountPt = (polygon: Point[], pt: Point): boolean => {
     }
 
     if (a.x < pt.x && b.x > pt.x) {
-      if (isSegmentIntersect([a, b], [pt, { x: pt.x, y: 0 }])) {
+      if (isSegmentIntersect([a, b], [pt, { x: pt.x, y: -1 }])) {
         return false;
       }
     }
